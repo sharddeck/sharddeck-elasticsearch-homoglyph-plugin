@@ -1,0 +1,500 @@
+{
+  "version": 2,
+  "description": "Fixed multilingual homoglyph indexing throughput and paced search",
+  "meta": {
+    "profile": "unicode_search_v1",
+    "corpus_sha256": "e02ee76af629d5d2b30fbf1a37a5e28642f8ab3037c2a945d9f8a04bf6d4ab64"
+  },
+  "indices": [
+    {
+      "name": "homoglyph-benchmark",
+      "body": "index.json"
+    }
+  ],
+  "corpora": [
+    {
+      "name": "general-multilingual-v1",
+      "documents": [
+        {
+          "source-file": "documents.json",
+          "document-count": 100000,
+          "uncompressed-bytes": 8240000,
+          "target-index": "homoglyph-benchmark"
+        }
+      ]
+    }
+  ],
+  "schedule": [
+    {
+      "operation": {
+        "operation-type": "create-index"
+      }
+    },
+    {
+      "operation": {
+        "operation-type": "cluster-health",
+        "request-params": {
+          "wait_for_status": "green"
+        }
+      }
+    },
+    {
+      "operation": {
+        "operation-type": "bulk",
+        "bulk-size": 1000
+      },
+      "clients": 4
+    },
+    {
+      "operation": {
+        "operation-type": "refresh"
+      }
+    },
+    {
+      "parallel": {
+        "tasks": [
+          {
+            "operation": {
+              "name": "query-00",
+              "operation-type": "search",
+              "index": "homoglyph-benchmark",
+              "body": {
+                "query": {
+                  "match": {
+                    "text": "ordinary"
+                  }
+                },
+                "size": 0
+              },
+              "request-params": {
+                "allow_partial_search_results": "false"
+              }
+            },
+            "clients": 1,
+            "warmup-time-period": 30,
+            "time-period": 120,
+            "target-throughput": 1
+          },
+          {
+            "operation": {
+              "name": "query-01",
+              "operation-type": "search",
+              "index": "homoglyph-benchmark",
+              "body": {
+                "query": {
+                  "match": {
+                    "text": "search"
+                  }
+                },
+                "size": 0
+              },
+              "request-params": {
+                "allow_partial_search_results": "false"
+              }
+            },
+            "clients": 1,
+            "warmup-time-period": 30,
+            "time-period": 120,
+            "target-throughput": 1
+          },
+          {
+            "operation": {
+              "name": "query-02",
+              "operation-type": "search",
+              "index": "homoglyph-benchmark",
+              "body": {
+                "query": {
+                  "match": {
+                    "text": "a"
+                  }
+                },
+                "size": 0
+              },
+              "request-params": {
+                "allow_partial_search_results": "false"
+              }
+            },
+            "clients": 1,
+            "warmup-time-period": 30,
+            "time-period": 120,
+            "target-throughput": 1
+          },
+          {
+            "operation": {
+              "name": "query-03",
+              "operation-type": "search",
+              "index": "homoglyph-benchmark",
+              "body": {
+                "query": {
+                  "match": {
+                    "text": "performance"
+                  }
+                },
+                "size": 0
+              },
+              "request-params": {
+                "allow_partial_search_results": "false"
+              }
+            },
+            "clients": 1,
+            "warmup-time-period": 30,
+            "time-period": 120,
+            "target-throughput": 1
+          },
+          {
+            "operation": {
+              "name": "query-04",
+              "operation-type": "search",
+              "index": "homoglyph-benchmark",
+              "body": {
+                "query": {
+                  "match": {
+                    "text": "the"
+                  }
+                },
+                "size": 0
+              },
+              "request-params": {
+                "allow_partial_search_results": "false"
+              }
+            },
+            "clients": 1,
+            "warmup-time-period": 30,
+            "time-period": 120,
+            "target-throughput": 1
+          },
+          {
+            "operation": {
+              "name": "query-05",
+              "operation-type": "search",
+              "index": "homoglyph-benchmark",
+              "body": {
+                "query": {
+                  "match": {
+                    "text": "Héllo"
+                  }
+                },
+                "size": 0
+              },
+              "request-params": {
+                "allow_partial_search_results": "false"
+              }
+            },
+            "clients": 1,
+            "warmup-time-period": 30,
+            "time-period": 120,
+            "target-throughput": 1
+          },
+          {
+            "operation": {
+              "name": "query-06",
+              "operation-type": "search",
+              "index": "homoglyph-benchmark",
+              "body": {
+                "query": {
+                  "match": {
+                    "text": "Čitanje"
+                  }
+                },
+                "size": 0
+              },
+              "request-params": {
+                "allow_partial_search_results": "false"
+              }
+            },
+            "clients": 1,
+            "warmup-time-period": 30,
+            "time-period": 120,
+            "target-throughput": 1
+          },
+          {
+            "operation": {
+              "name": "query-07",
+              "operation-type": "search",
+              "index": "homoglyph-benchmark",
+              "body": {
+                "query": {
+                  "match": {
+                    "text": "El"
+                  }
+                },
+                "size": 0
+              },
+              "request-params": {
+                "allow_partial_search_results": "false"
+              }
+            },
+            "clients": 1,
+            "warmup-time-period": 30,
+            "time-period": 120,
+            "target-throughput": 1
+          },
+          {
+            "operation": {
+              "name": "query-08",
+              "operation-type": "search",
+              "index": "homoglyph-benchmark",
+              "body": {
+                "query": {
+                  "match": {
+                    "text": "Les"
+                  }
+                },
+                "size": 0
+              },
+              "request-params": {
+                "allow_partial_search_results": "false"
+              }
+            },
+            "clients": 1,
+            "warmup-time-period": 30,
+            "time-period": 120,
+            "target-throughput": 1
+          },
+          {
+            "operation": {
+              "name": "query-09",
+              "operation-type": "search",
+              "index": "homoglyph-benchmark",
+              "body": {
+                "query": {
+                  "match": {
+                    "text": "Сегодня"
+                  }
+                },
+                "size": 0
+              },
+              "request-params": {
+                "allow_partial_search_results": "false"
+              }
+            },
+            "clients": 1,
+            "warmup-time-period": 30,
+            "time-period": 120,
+            "target-throughput": 1
+          },
+          {
+            "operation": {
+              "name": "query-10",
+              "operation-type": "search",
+              "index": "homoglyph-benchmark",
+              "body": {
+                "query": {
+                  "match": {
+                    "text": "Пошук"
+                  }
+                },
+                "size": 0
+              },
+              "request-params": {
+                "allow_partial_search_results": "false"
+              }
+            },
+            "clients": 1,
+            "warmup-time-period": 30,
+            "time-period": 120,
+            "target-throughput": 1
+          },
+          {
+            "operation": {
+              "name": "query-11",
+              "operation-type": "search",
+              "index": "homoglyph-benchmark",
+              "body": {
+                "query": {
+                  "match": {
+                    "text": "Град"
+                  }
+                },
+                "size": 0
+              },
+              "request-params": {
+                "allow_partial_search_results": "false"
+              }
+            },
+            "clients": 1,
+            "warmup-time-period": 30,
+            "time-period": 120,
+            "target-throughput": 1
+          },
+          {
+            "operation": {
+              "name": "query-12",
+              "operation-type": "search",
+              "index": "homoglyph-benchmark",
+              "body": {
+                "query": {
+                  "match": {
+                    "text": "Η"
+                  }
+                },
+                "size": 0
+              },
+              "request-params": {
+                "allow_partial_search_results": "false"
+              }
+            },
+            "clients": 1,
+            "warmup-time-period": 30,
+            "time-period": 120,
+            "target-throughput": 1
+          },
+          {
+            "operation": {
+              "name": "query-13",
+              "operation-type": "search",
+              "index": "homoglyph-benchmark",
+              "body": {
+                "query": {
+                  "match": {
+                    "text": "Οι"
+                  }
+                },
+                "size": 0
+              },
+              "request-params": {
+                "allow_partial_search_results": "false"
+              }
+            },
+            "clients": 1,
+            "warmup-time-period": 30,
+            "time-period": 120,
+            "target-throughput": 1
+          },
+          {
+            "operation": {
+              "name": "query-14",
+              "operation-type": "search",
+              "index": "homoglyph-benchmark",
+              "body": {
+                "query": {
+                  "match": {
+                    "text": "图书馆提供中文书籍"
+                  }
+                },
+                "size": 0
+              },
+              "request-params": {
+                "allow_partial_search_results": "false"
+              }
+            },
+            "clients": 1,
+            "warmup-time-period": 30,
+            "time-period": 120,
+            "target-throughput": 1
+          },
+          {
+            "operation": {
+              "name": "query-15",
+              "operation-type": "search",
+              "index": "homoglyph-benchmark",
+              "body": {
+                "query": {
+                  "match": {
+                    "text": "搜索引擎处理多语言文本"
+                  }
+                },
+                "size": 0
+              },
+              "request-params": {
+                "allow_partial_search_results": "false"
+              }
+            },
+            "clients": 1,
+            "warmup-time-period": 30,
+            "time-period": 120,
+            "target-throughput": 1
+          },
+          {
+            "operation": {
+              "name": "query-16",
+              "operation-type": "search",
+              "index": "homoglyph-benchmark",
+              "body": {
+                "query": {
+                  "match": {
+                    "text": "البحث"
+                  }
+                },
+                "size": 0
+              },
+              "request-params": {
+                "allow_partial_search_results": "false"
+              }
+            },
+            "clients": 1,
+            "warmup-time-period": 30,
+            "time-period": 120,
+            "target-throughput": 1
+          },
+          {
+            "operation": {
+              "name": "query-17",
+              "operation-type": "search",
+              "index": "homoglyph-benchmark",
+              "body": {
+                "query": {
+                  "match": {
+                    "text": "تجربة"
+                  }
+                },
+                "size": 0
+              },
+              "request-params": {
+                "allow_partial_search_results": "false"
+              }
+            },
+            "clients": 1,
+            "warmup-time-period": 30,
+            "time-period": 120,
+            "target-throughput": 1
+          },
+          {
+            "operation": {
+              "name": "query-18",
+              "operation-type": "search",
+              "index": "homoglyph-benchmark",
+              "body": {
+                "query": {
+                  "match": {
+                    "text": "पुस्तकालय"
+                  }
+                },
+                "size": 0
+              },
+              "request-params": {
+                "allow_partial_search_results": "false"
+              }
+            },
+            "clients": 1,
+            "warmup-time-period": 30,
+            "time-period": 120,
+            "target-throughput": 1
+          },
+          {
+            "operation": {
+              "name": "query-19",
+              "operation-type": "search",
+              "index": "homoglyph-benchmark",
+              "body": {
+                "query": {
+                  "match": {
+                    "text": "reading"
+                  }
+                },
+                "size": 0
+              },
+              "request-params": {
+                "allow_partial_search_results": "false"
+              }
+            },
+            "clients": 1,
+            "warmup-time-period": 30,
+            "time-period": 120,
+            "target-throughput": 1
+          }
+        ]
+      }
+    }
+  ]
+}

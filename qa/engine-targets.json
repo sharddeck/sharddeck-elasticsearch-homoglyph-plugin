@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "status": "implemented",
+  "plugin_id": "analysis-homoglyph",
+  "filter_name": "homoglyph",
+  "plugin_version": "0.1.0-SNAPSHOT",
+  "version_policy": "docs/releases.md",
+  "minimum_supported_engine": "elasticsearch-7.17.3",
+  "targets": [
+    {
+      "module": "adapters/elasticsearch-7",
+      "api": "classic",
+      "version_property": "elasticsearch7.version",
+      "default_compile_version": "7.17.3",
+      "java_release": 11,
+      "installation_tested": true,
+      "behavior_tested": true,
+      "verified_engine_versions": [
+        "7.17.3",
+        "7.17.29"
+      ],
+      "evidence": "qa/integration/verification.json"
+    },
+    {
+      "module": "adapters/elasticsearch-8",
+      "api": "classic",
+      "version_property": "elasticsearch8.version",
+      "default_compile_version": "8.0.0",
+      "java_release": 17,
+      "installation_tested": true,
+      "behavior_tested": true,
+      "verified_engine_versions": [
+        "8.0.0"
+      ],
+      "evidence": "qa/integration/verification.json"
+    },
+    {
+      "module": "adapters/elasticsearch-stable-8",
+      "api": "stable",
+      "version_property": "elasticsearch.stable8.version",
+      "default_compile_version": "8.7.0",
+      "java_release": 17,
+      "installation_tested": true,
+      "behavior_tested": true,
+      "verified_engine_versions": [
+        "8.7.0",
+        "8.19.21"
+      ],
+      "evidence": "qa/integration/verification.json"
+    },
+    {
+      "module": "adapters/elasticsearch-stable-9",
+      "api": "stable",
+      "version_property": "elasticsearch.stable9.version",
+      "default_compile_version": "9.0.0",
+      "java_release": 21,
+      "installation_tested": true,
+      "behavior_tested": true,
+      "verified_engine_versions": [
+        "9.0.0",
+        "9.5.3"
+      ],
+      "evidence": "qa/integration/verification.json"
+    },
+    {
+      "module": "adapters/opensearch-2",
+      "api": "classic",
+      "version_property": "opensearch2.version",
+      "default_compile_version": "2.19.6",
+      "java_release": 21,
+      "installation_tested": true,
+      "behavior_tested": true,
+      "verified_engine_versions": [
+        "2.19.6"
+      ],
+      "evidence": "qa/integration/verification.json"
+    },
+    {
+      "module": "adapters/opensearch-3",
+      "api": "classic",
+      "version_property": "opensearch3.version",
+      "default_compile_version": "3.8.0",
+      "java_release": 25,
+      "installation_tested": true,
+      "behavior_tested": true,
+      "verified_engine_versions": [
+        "3.8.0"
+      ],
+      "evidence": "qa/integration/verification.json"
+    }
+  ]
+}

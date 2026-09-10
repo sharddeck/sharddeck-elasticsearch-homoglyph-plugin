@@ -1,0 +1,141 @@
+# SPDX-License-Identifier: MPL-2.0
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
+name: sharddeck-homoglyph
+
+# Functional test nodes. Start one at a time on a development machine.
+# Version tags were checked against engine releases on 2026-09-07.
+x-runtime: &runtime
+  restart: "no"
+  cpus: 2.0
+  mem_limit: 2g
+  memswap_limit: 2g
+  pids_limit: 512
+  stop_grace_period: 30s
+  ulimits:
+    nofile:
+      soft: 65536
+      hard: 65536
+  healthcheck:
+    test:
+      - CMD-SHELL
+      - >-
+        curl --fail --silent --max-time 5
+        'http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=3s'
+        | grep -Eq '"status"[[:space:]]*:[[:space:]]*"(green|yellow)"'
+    interval: 5s
+    timeout: 6s
+    start_period: 60s
+    retries: 24
+  logging:
+    driver: json-file
+    options:
+      max-size: "10m"
+      max-file: "2"
+
+x-elasticsearch-env: &elasticsearch-env
+  discovery.type: single-node
+  xpack.security.enabled: "false"
+  xpack.ml.enabled: "false"
+  ingest.geoip.downloader.enabled: "false"
+  node.store.allow_mmap: "false"
+  ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+
+x-opensearch-env: &opensearch-env
+  discovery.type: single-node
+  node.store.allow_mmap: "false"
+  DISABLE_INSTALL_DEMO_CONFIG: "true"
+  DISABLE_SECURITY_PLUGIN: "true"
+  OPENSEARCH_JAVA_OPTS: "-Xms512m -Xmx512m"
+
+services:
+  es7:
+    <<: *runtime
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.29
+    profiles: [latest, elasticsearch]
+    environment:
+      <<: *elasticsearch-env
+      cluster.name: homoglyph-es7
+      node.name: es7
+    ports: ["127.0.0.1:9207:9200"]
+    volumes: ["es7-data:/usr/share/elasticsearch/data"]
+
+  es8:
+    <<: *runtime
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.19.21
+    profiles: [latest, elasticsearch]
+    environment:
+      <<: *elasticsearch-env
+      cluster.name: homoglyph-es8
+      node.name: es8
+      xpack.security.autoconfiguration.enabled: "false"
+    ports: ["127.0.0.1:9208:9200"]
+    volumes: ["es8-data:/usr/share/elasticsearch/data"]
+
+  es9:
+    <<: *runtime
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.5.3
+    stop_grace_period: 90s
+    profiles: [latest, elasticsearch]
+    environment:
+      <<: *elasticsearch-env
+      cluster.name: homoglyph-es9
+      node.name: es9
+      xpack.security.autoconfiguration.enabled: "false"
+    ports: ["127.0.0.1:9209:9200"]
+    volumes: ["es9-data:/usr/share/elasticsearch/data"]
+
+  os1:
+    <<: *runtime
+    image: opensearchproject/opensearch:1.3.20
+    profiles: [latest, opensearch]
+    environment:
+      <<: *opensearch-env
+      cluster.name: homoglyph-os1
+      node.name: os1
+    ports: ["127.0.0.1:9211:9200"]
+    volumes: ["os1-data:/usr/share/opensearch/data"]
+
+  os2:
+    <<: *runtime
+    image: opensearchproject/opensearch:2.19.6
+    profiles: [latest, opensearch]
+    environment:
+      <<: *opensearch-env
+      cluster.name: homoglyph-os2
+      node.name: os2
+    ports: ["127.0.0.1:9212:9200"]
+    volumes: ["os2-data:/usr/share/opensearch/data"]
+
+  os3:
+    <<: *runtime
+    image: opensearchproject/opensearch:3.8.0
+    profiles: [latest, opensearch]
+    environment:
+      <<: *opensearch-env
+      cluster.name: homoglyph-os3
+      node.name: os3
+    ports: ["127.0.0.1:9213:9200"]
+    volumes: ["os3-data:/usr/share/opensearch/data"]
+
+  es7173:
+    <<: *runtime
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.3
+    profiles: [baseline]
+    environment:
+      <<: *elasticsearch-env
+      cluster.name: homoglyph-es7173
+      node.name: es7173
+    ports: ["127.0.0.1:9173:9200"]
+    volumes: ["es7173-data:/usr/share/elasticsearch/data"]
+
+volumes:
+  es7-data:
+  es8-data:
+  es9-data:
+  os1-data:
+  os2-data:
+  os3-data:
+  es7173-data:

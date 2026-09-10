@@ -1,0 +1,172 @@
+// SPDX-License-Identifier: MPL-2.0
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
+plugins { id 'base' }
+
+allprojects {
+    group = 'io.sharddeck.homoglyph'
+    version = rootProject.version
+    tasks.withType(AbstractArchiveTask).configureEach {
+        preserveFileTimestamps = false
+        reproducibleFileOrder = true
+    }
+}
+
+def javaProjects = [
+    ':homoglyph-data': 'homoglyph-data', ':homoglyph-core': 'homoglyph-core',
+    ':tools': 'homoglyph-tools',
+    ':benchmarks:jmh': 'homoglyph-jmh'
+]
+def adapters = [
+    'elasticsearch-7': [release: 11, property: 'elasticsearch7.version', host: 'org.elasticsearch:elasticsearch'],
+    'elasticsearch-8': [release: 17, property: 'elasticsearch8.version', host: 'org.elasticsearch:elasticsearch'],
+    'elasticsearch-stable-8': [release: 17, property: 'elasticsearch.stable8.version', stable: true],
+    'elasticsearch-stable-9': [release: 21, property: 'elasticsearch.stable9.version', stable: true],
+    'opensearch-2': [release: 21, property: 'opensearch2.version', host: 'org.opensearch:opensearch'],
+    'opensearch-3': [release: 25, property: 'opensearch3.version', host: 'org.opensearch:opensearch']
+]
+adapters.each { name, config -> javaProjects[":adapters:$name"] = "homoglyph-$name" }
+
+javaProjects.each { path, artifact ->
+    project(path) {
+        apply plugin: 'java-library'
+        base { archivesName = artifact }
+        java { toolchain { languageVersion = JavaLanguageVersion.of(17) } }
+        tasks.withType(JavaCompile).configureEach {
+            options.release = 11
+            options.encoding = 'UTF-8'
+            options.debugOptions.debugLevel = 'source,lines,vars'
+        }
+        dependencies {
+            testImplementation 'org.junit.jupiter:junit-jupiter:5.12.2'
+            testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.12.2'
+        }
+        tasks.withType(Test).configureEach {
+            useJUnitPlatform()
+            minHeapSize = '128m'
+            maxHeapSize = '256m'
+            maxParallelForks = 1
+            testLogging { events 'failed', 'skipped'; exceptionFormat = 'full' }
+        }
+        def identity = tasks.register('artifactIdentity', WriteProperties) {
+            destinationFile = layout.buildDirectory.file('generated/identity/component.properties')
+            property('groupId', project.group.toString())
+            property('artifactId', artifact)
+            property('version', project.version.toString())
+            property('license', 'MPL-2.0')
+        }
+        tasks.named('processResources') { from(identity) { into 'META-INF/homoglyph' } }
+        tasks.withType(Jar).configureEach {
+            from(rootProject.files('LICENSE', 'NOTICE', 'SOURCE.md')) { into 'META-INF' }
+            from(rootProject.file('licenses')) { into 'META-INF/licenses' }
+            // Keep the corresponding source available even when a JAR is redistributed alone.
+            from(sourceSets.main.allSource) { into "META-INF/homoglyph/sources/$artifact" }
+        }
+    }
+}
+
+project(':homoglyph-data') {
+    tasks.named('jar') {
+        from(rootProject.file('tools/GenerateData.java')) { into 'META-INF/homoglyph/sources/homoglyph-data' }
+    }
+}
+
+project(':homoglyph-core') {
+    dependencies {
+        implementation project(':homoglyph-data')
+        implementation 'com.ibm.icu:icu4j:78.1'
+    }
+}
+
+adapters.each { name, config ->
+    project(":adapters:$name") {
+        def engineVersion = providers.gradleProperty(config.property).get()
+        // Exact classic versions have independent outputs, so multiple packages coexist safely.
+        layout.buildDirectory = layout.projectDirectory.dir("build/$engineVersion")
+        java { toolchain { languageVersion = JavaLanguageVersion.of(Math.max(17, config.release)) } }
+        tasks.withType(JavaCompile).configureEach { options.release = config.release }
+        sourceSets {
+            main.java.srcDir rootProject.file('homoglyph-lucene/src/main/java')
+            test.java.srcDir rootProject.file('qa/contracts/src/test/java')
+        }
+        configurations {
+            hostApi
+            compileOnly.extendsFrom hostApi
+            testImplementation.extendsFrom hostApi
+        }
+        dependencies {
+            implementation project(':homoglyph-core')
+            if (config.stable) {
+                hostApi "org.elasticsearch.plugin:elasticsearch-plugin-analysis-api:$engineVersion"
+                hostApi "org.elasticsearch.plugin:elasticsearch-plugin-api:$engineVersion"
+            } else {
+                hostApi "${config.host}:$engineVersion"
+            }
+        }
+        def metadata = tasks.register('pluginMetadata', Sync) {
+            from('src/packaging') {
+                expand(pluginVersion: project.version, javaRelease: config.release, engineVersion: engineVersion)
+            }
+            into layout.buildDirectory.dir('plugin-metadata')
+        }
+        def bundle = tasks.register('pluginZip', Zip) {
+            archiveFileName = "sharddeck-homoglyph-${name}-${project.version}-${engineVersion}.zip"
+            destinationDirectory = layout.buildDirectory.dir('distributions')
+            duplicatesStrategy = DuplicatesStrategy.FAIL
+            from(tasks.named('jar'))
+            from(configurations.runtimeClasspath)
+            from(metadata)
+            from(rootProject.files('LICENSE', 'NOTICE', 'SOURCE.md'))
+            from(rootProject.file('licenses')) { into 'licenses' }
+        }
+        tasks.named('assemble') { dependsOn bundle }
+    }
+}
+
+project(':benchmarks:jmh') {
+    sourceSets.main.java.srcDir rootProject.file('homoglyph-lucene/src/main/java')
+    tasks.named('processResources') { from('../corpus') { into 'corpus' } }
+    dependencies {
+        implementation project(':homoglyph-core')
+        implementation 'org.apache.lucene:lucene-analyzers-common:8.11.1'
+        implementation 'org.openjdk.jmh:jmh-core:1.37'
+        annotationProcessor 'org.openjdk.jmh:jmh-generator-annprocess:1.37'
+    }
+}
+
+project(':tools') {
+    dependencies {
+        implementation project(':homoglyph-core')
+    }
+}
+
+[
+    ':benchmarks:jmh': [file: 'benchmarks.jar', main: 'org.openjdk.jmh.Main'],
+    ':tools': [file: 'homoglyph-tools.jar', main: 'io.sharddeck.homoglyph.tools.Main']
+].each { path, config ->
+    project(path) {
+        def executable = tasks.register('executableJar', Jar) {
+            archiveFileName = config.file
+            manifest { attributes 'Main-Class': config.main }
+            duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+            from(sourceSets.main.output)
+            from({ configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } })
+            exclude 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA', 'module-info.class', 'META-INF/versions/**/module-info.class'
+            from(rootProject.file('licenses')) { into 'licenses' }
+            dependsOn configurations.runtimeClasspath
+        }
+        tasks.named('assemble') { dependsOn executable }
+    }
+}
+
+tasks.named('assemble') { dependsOn javaProjects.keySet().collect { "$it:assemble" } }
+tasks.named('check') { dependsOn javaProjects.keySet().collect { "$it:check" } }
+tasks.named('clean') { delete subprojects.collect { it.layout.projectDirectory.dir('build') } }
+
+tasks.named('wrapper') {
+    gradleVersion = '9.7.1'
+    distributionType = Wrapper.DistributionType.BIN
+    distributionSha256Sum = 'acd53f1edaf02f1a8ff99879f8a34b302661a057d9b063ae9e35b552f804d20a'
+}

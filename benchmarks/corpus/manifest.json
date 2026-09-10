@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "id": "general-multilingual-v1",
+  "authorship": "Original synthetic sentences written for this benchmark; no production or personal data",
+  "document_count": 20,
+  "weights_percent": {
+    "ascii": 25,
+    "latin": 20,
+    "cyrillic": 15,
+    "greek": 10,
+    "cjk": 10,
+    "arabic": 10,
+    "indic": 5,
+    "emoji": 5
+  },
+  "tokenizer": "whitespace",
+  "sha256": "9cc23f53ee8439e5354bb61b5ab0e218ba38c5ea96c1e80115ffaa669e80f221",
+  "frozen_at": "2026-09-07",
+  "normalization": "unicode_search_v1, with and without original preservation"
+}

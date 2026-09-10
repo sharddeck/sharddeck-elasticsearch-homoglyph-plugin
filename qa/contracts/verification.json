@@ -1,0 +1,92 @@
+{
+  "checked_at": "2026-09-09T12:05:16.580700+00:00",
+  "totals": {
+    "tests": 94,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "suites": [
+    {
+      "report": "homoglyph-core/build/test-results/test/TEST-io.sharddeck.homoglyph.core.UnicodeBoundsTest.xml",
+      "sha256": "3e69e3caae7556d38077d001705713fc19ed7f6b9391735a728e0e5ab042c2c3",
+      "suite": "io.sharddeck.homoglyph.core.UnicodeBoundsTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "report": "homoglyph-core/build/test-results/test/TEST-io.sharddeck.homoglyph.core.ProcessorTest.xml",
+      "sha256": "ff5fd301e7129c13c6053a9fe084fc04f12f94bc56f0bf9a1f16da43e658d2a0",
+      "suite": "io.sharddeck.homoglyph.core.ProcessorTest",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "report": "adapters/elasticsearch-stable-8/build/8.7.0/test-results/test/TEST-io.sharddeck.homoglyph.lucene.FilterTest.xml",
+      "sha256": "452ecab67ed3ebaa72824c6602493db9165218a96289d83030b2d6b6cdd3b83f",
+      "suite": "io.sharddeck.homoglyph.lucene.FilterTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "report": "adapters/elasticsearch-stable-9/build/9.0.0/test-results/test/TEST-io.sharddeck.homoglyph.lucene.FilterTest.xml",
+      "sha256": "9bc26b35194599a77625290035d956bfe3d2acfea64752361480b72c4f512c27",
+      "suite": "io.sharddeck.homoglyph.lucene.FilterTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "report": "adapters/opensearch-3/build/3.8.0/test-results/test/TEST-io.sharddeck.homoglyph.lucene.FilterTest.xml",
+      "sha256": "418da0b317f390bfe93f1380f0f6b0ed767ad2666b767807b70974707a62d360",
+      "suite": "io.sharddeck.homoglyph.lucene.FilterTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "report": "adapters/opensearch-2/build/2.19.6/test-results/test/TEST-io.sharddeck.homoglyph.lucene.FilterTest.xml",
+      "sha256": "3077aa72c420cb3d01d717be0695f84190ccabe8744505c33548e5c9262c5a30",
+      "suite": "io.sharddeck.homoglyph.lucene.FilterTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "report": "adapters/elasticsearch-7/build/7.17.29/test-results/test/TEST-io.sharddeck.homoglyph.lucene.FilterTest.xml",
+      "sha256": "4a51d8e96b8f5fe88bf35a84d46cb2af2224587117a7cb671a149f2f7408c992",
+      "suite": "io.sharddeck.homoglyph.lucene.FilterTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "report": "adapters/elasticsearch-7/build/7.17.3/test-results/test/TEST-io.sharddeck.homoglyph.lucene.FilterTest.xml",
+      "sha256": "32b31bc1d2b8e2d279b57f0f454011dce94275934cd642392fea6db0b69b8a7f",
+      "suite": "io.sharddeck.homoglyph.lucene.FilterTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "report": "adapters/elasticsearch-8/build/8.0.0/test-results/test/TEST-io.sharddeck.homoglyph.lucene.FilterTest.xml",
+      "sha256": "54cf75bf31fa75508803cde3a71cd9158b80b6311d8619b1126fa1d20ea962ee",
+      "suite": "io.sharddeck.homoglyph.lucene.FilterTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ]
+}

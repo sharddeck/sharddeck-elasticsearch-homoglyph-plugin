@@ -1,0 +1,54 @@
+# SPDX-License-Identifier: MPL-2.0
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
+name: Engine and resource qualification
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 3 * * 1'
+permissions:
+  contents: read
+jobs:
+  qualify:
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [engines, memory, server, jmh]
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+      - run: ./gradlew build
+      - if: matrix.suite == 'engines'
+        run: |
+          ./gradlew :adapters:elasticsearch-7:build -Pelasticsearch7.version=7.17.29
+          python3 qa/integration/run.py
+          python3 qa/integration/coexistence.py
+          python3 qa/integration/java11.py
+      - if: matrix.suite == 'memory'
+        run: python3 qa/memory/run.py --seconds 1800
+      - if: matrix.suite == 'server'
+        run: |
+          python3 benchmarks/server/run.py --seconds 120 --output benchmarks/results/server
+          python3 benchmarks/server/run.py --stress --seconds 1800 --output benchmarks/results/server-stress
+      - if: matrix.suite == 'jmh'
+        run: python3 benchmarks/run_jmh.py --note 'GitHub hosted runner; performance qualification requires a dedicated controlled host.'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qualification-${{ matrix.suite }}
+          path: |
+            qa/integration/*.json
+            qa/integration/*.log
+            qa/memory/*.json
+            qa/memory/*.log
+            benchmarks/results/**/*.json
+            benchmarks/results/**/*.log
+            **/build/**/test-results/test/

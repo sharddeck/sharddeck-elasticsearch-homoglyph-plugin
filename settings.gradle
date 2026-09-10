@@ -1,0 +1,21 @@
+// SPDX-License-Identifier: MPL-2.0
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
+plugins {
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
+}
+
+rootProject.name = 'sharddeck-elasticsearch-homoglyph-plugin'
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories { mavenCentral() }
+}
+
+include 'homoglyph-data', 'homoglyph-core', 'homoglyph-lucene', 'qa', 'tools'
+include 'adapters:elasticsearch-7', 'adapters:elasticsearch-8'
+include 'adapters:elasticsearch-stable-8', 'adapters:elasticsearch-stable-9'
+include 'adapters:opensearch-2', 'adapters:opensearch-3'
+include 'benchmarks:jmh'

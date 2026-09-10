@@ -1,0 +1,23 @@
+ShardDeck Homoglyph Analysis
+
+Copyright (c) 2026 ShardDeck Homoglyph Analysis contributors
+
+The project source code, build scripts, tests, documentation and configuration
+are licensed under the Mozilla Public License, v. 2.0 (SPDX: MPL-2.0), except
+for third-party material carrying its own notices. See LICENSE for the full
+license and SOURCE.md for the source included with binary distributions.
+
+ICU4J 78.1 is distributed with the Unicode License V3 notice in licenses/icu.
+Production packages contain the unmodified pinned ICU JAR.
+
+Unicode expansion bounds are generated from ICU4J 78.1. Profile provenance,
+checksums and normalization policies are recorded in
+homoglyph-data/src/main/resources/io/sharddeck/homoglyph/data/profiles.json.
+
+The Unicode notices also apply to the generated unicode-bounds.bin data.
+
+The Gradle wrapper (gradlew, gradlew.bat and gradle/wrapper/gradle-wrapper.jar)
+is third-party software under the Apache License, Version 2.0. Its existing
+copyright and license notices remain in effect; see licenses/gradle/LICENSE.
+
+Other third-party dependencies retain their own licenses and notices.

@@ -1,0 +1,8 @@
+---
+description: Use Gradle for Java and JVM builds
+alwaysApply: true
+---
+
+- Use the checked-in Gradle wrapper for this project.
+- Never bootstrap a project with Maven. Use Gradle for new Java/JVM projects.
+- Keep build, packaging, benchmarks, QA scripts and CI on Gradle.

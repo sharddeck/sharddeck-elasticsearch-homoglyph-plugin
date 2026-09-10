@@ -1,0 +1,9 @@
+{
+  "checked_at": "2026-09-09T14:18:01.248956+00:00",
+  "artifact_sha256": "628d9fb17f7d242ad04315ade884bbf9ef64a94d66f81250da9da42d73500422",
+  "java_version": "11.0.32",
+  "image_id": "sha256:ca05471567558c66967423752d8e094a32aaf46d3c4a1d8f9eebd514f03b8caa",
+  "oom_killed": false,
+  "exit_code": 143,
+  "status": "passed"
+}

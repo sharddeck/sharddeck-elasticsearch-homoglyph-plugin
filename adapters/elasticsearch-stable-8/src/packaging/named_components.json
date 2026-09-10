@@ -1,0 +1,6 @@
+{
+  "org.elasticsearch.plugin.analysis.TokenFilterFactory": {
+    "homoglyph": "io.sharddeck.homoglyph.adapter.esstable8.HomoglyphTokenFilterFactory"
+  }
+}
+

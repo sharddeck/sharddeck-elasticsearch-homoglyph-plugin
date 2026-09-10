@@ -1,0 +1,68 @@
+{
+  "settings": {
+    "analysis": {
+      "filter": {
+        "visual_unicode": {
+          "type": "homoglyph",
+          "profile": "unicode_search_v1",
+          "preserve_original": false,
+          "max_input_utf16_units": 4096,
+          "max_output_utf8_bytes": 16384,
+          "max_output_bytes_per_input": 65536
+        }
+      },
+      "analyzer": {
+        "unicode_homoglyph": {
+          "tokenizer": "standard",
+          "filter": [
+            "visual_unicode"
+          ]
+        },
+        "unicode_identifier": {
+          "tokenizer": "keyword",
+          "filter": [
+            "visual_unicode"
+          ]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "_meta": {
+      "status": "example; immutable Unicode search policy",
+      "homoglyph_profiles": [
+        "unicode_search_v1"
+      ],
+      "unicode_profile_icu_version": "78.1",
+      "unicode_profile_unicode_version": "17.0.0",
+      "homoglyph_profile_fingerprints": {
+        "unicode_search_v1": "ca798dd5ac3e7189cf9c89a18f481396c5e39ddcee4916382779f2d753da5659"
+      }
+    },
+    "properties": {
+      "name": {
+        "type": "text",
+        "analyzer": "standard",
+        "fields": {
+          "raw": {
+            "type": "keyword",
+            "ignore_above": 1024
+          },
+          "visual": {
+            "type": "text",
+            "analyzer": "unicode_homoglyph"
+          }
+        }
+      },
+      "identifier": {
+        "type": "keyword",
+        "fields": {
+          "visual": {
+            "type": "text",
+            "analyzer": "unicode_identifier"
+          }
+        }
+      }
+    }
+  }
+}

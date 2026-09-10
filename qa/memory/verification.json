@@ -1,0 +1,50 @@
+{
+  "started_at": "2026-09-09T12:02:49.461583+00:00",
+  "duration_seconds": 120,
+  "runtime_sha256": "5ebfaa00d0c3ed71e49c3791e81c39fc33ee5a95da2eb13dfb0f1fb8c59cde8e",
+  "harness_sha256": "f387a017d3eb0ad143ccf54d038b76c2ff2a5696db55c1688a5bc65284a85ac0",
+  "image_id": "sha256:f456578fc2a620a8a4f4c21d070fff1f6070345adb2be5e5626b65be72aea350",
+  "heap_bytes": 268435456,
+  "container_memory_bytes": 1073741824,
+  "oom_killed": false,
+  "exit_code": 0,
+  "phases": [
+    {
+      "threads": 1,
+      "accepted": 485679,
+      "rejected": 161892,
+      "heap_after_gc": 3593784,
+      "reserved": 37344,
+      "borrowed": 0,
+      "peak_reservation": 1151456
+    },
+    {
+      "threads": 8,
+      "accepted": 789874,
+      "rejected": 431229,
+      "heap_after_gc": 3990392,
+      "reserved": 28704,
+      "borrowed": 0,
+      "peak_reservation": 2096640
+    },
+    {
+      "threads": 32,
+      "accepted": 738879,
+      "rejected": 866413,
+      "heap_after_gc": 5247296,
+      "reserved": 25600,
+      "borrowed": 0,
+      "peak_reservation": 2096640
+    },
+    {
+      "threads": 128,
+      "accepted": 586259,
+      "rejected": 1470708,
+      "heap_after_gc": 3264680,
+      "reserved": 4384,
+      "borrowed": 0,
+      "peak_reservation": 2096640
+    }
+  ],
+  "status": "passed"
+}

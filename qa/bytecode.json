@@ -1,0 +1,47 @@
+{
+  "status": "passed",
+  "artifacts": [
+    {
+      "artifact": "adapters/elasticsearch-7/build/7.17.29/distributions/sharddeck-homoglyph-elasticsearch-7-0.1.0-SNAPSHOT-7.17.29.zip",
+      "sha256": "533b9ed2761b83db6ea1a7ed4470ddbfaea779512db9a2459efbebc4677a144e",
+      "adapter_java_release": 11,
+      "project_classes": 25
+    },
+    {
+      "artifact": "adapters/elasticsearch-7/build/7.17.3/distributions/sharddeck-homoglyph-elasticsearch-7-0.1.0-SNAPSHOT-7.17.3.zip",
+      "sha256": "3ca9f9b4c3446640d8d87e04c5a606332d5d65dcbed35a4b781b8925d30b3a22",
+      "adapter_java_release": 11,
+      "project_classes": 25
+    },
+    {
+      "artifact": "adapters/elasticsearch-8/build/8.0.0/distributions/sharddeck-homoglyph-elasticsearch-8-0.1.0-SNAPSHOT-8.0.0.zip",
+      "sha256": "3ad664a844b4a64152e65fadfa908dcf4c918e42c588bcf9870bf369e6216f01",
+      "adapter_java_release": 17,
+      "project_classes": 25
+    },
+    {
+      "artifact": "adapters/elasticsearch-stable-8/build/8.7.0/distributions/sharddeck-homoglyph-elasticsearch-stable-8-0.1.0-SNAPSHOT-8.7.0.zip",
+      "sha256": "e2bd5d5b21a118e34e0251b2d73cc166e66dc488336f0f01dfd1447a13fd70e5",
+      "adapter_java_release": 17,
+      "project_classes": 25
+    },
+    {
+      "artifact": "adapters/elasticsearch-stable-9/build/9.0.0/distributions/sharddeck-homoglyph-elasticsearch-stable-9-0.1.0-SNAPSHOT-9.0.0.zip",
+      "sha256": "07fffd82449fe2eb5e26ce6dd3812f734164041462c24dfa001293d461d199a6",
+      "adapter_java_release": 21,
+      "project_classes": 25
+    },
+    {
+      "artifact": "adapters/opensearch-2/build/2.19.6/distributions/sharddeck-homoglyph-opensearch-2-0.1.0-SNAPSHOT-2.19.6.zip",
+      "sha256": "43553884c3dec44c5c4b208818b0b3730c45d31003d02512e8fc815bd9572551",
+      "adapter_java_release": 21,
+      "project_classes": 25
+    },
+    {
+      "artifact": "adapters/opensearch-3/build/3.8.0/distributions/sharddeck-homoglyph-opensearch-3-0.1.0-SNAPSHOT-3.8.0.zip",
+      "sha256": "5d3ee67e571faa3b15daa785b3a367baaba7f70d6833e37dbc0d9cd3e193187e",
+      "adapter_java_release": 25,
+      "project_classes": 25
+    }
+  ]
+}

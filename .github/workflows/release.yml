@@ -1,0 +1,47 @@
+# SPDX-License-Identifier: MPL-2.0
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
+name: Release packages
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+      - name: Verify stable tag and version
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: bash
+        run: |
+          tag_version="${GITHUB_REF_NAME#v}"
+          project_version="$(sed -n 's/^version=//p' gradle.properties)"
+          test "$tag_version" = "$project_version"
+          case "$project_version" in
+            *-SNAPSHOT|*-*) echo "Release tags require a stable SemVer version: $project_version" >&2; exit 1 ;;
+          esac
+      - run: ./gradlew clean build
+      - run: python3 tools/validate_config.py docs/examples/index.json
+      - run: python3 tools/package_manifest.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sharddeck-homoglyph-${{ github.ref_name }}
+          path: |
+            dist/
+            **/build/**/distributions/*.zip
+            **/build/libs/*.jar

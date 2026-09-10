@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "status": "implemented",
+  "profiles": [
+    {
+      "id": "unicode_search_v1",
+      "status": "implemented",
+      "unicode_version": "17.0.0",
+      "reference_icu4j_version": "78.1",
+      "reference_icu4j_sha256": "bbb70d3be23110d7295823eee0c2e896ac3b619b3c0f26168f65eb972df51d2a",
+      "bounds_sha256": "9d82d15961457ef0d2ce5c53753ca4c81ad9d686ed78324334bfe6e086557304",
+      "bounds_entries": 20937,
+      "pipeline": [
+        "ICU NFKC_Casefold",
+        "ICU NFD",
+        "Remove Mn marks whose most recent non-Mark base has Script=Latin",
+        "ICU SpoofChecker.getSkeleton"
+      ],
+      "empty_policy": "Drop empty normalized terms; preserve a nonempty original when requested",
+      "malformed_utf16": "reject",
+      "conformance": "Search equivalence profile, not complete UTS #39 Unicode 17 bidi skeleton conformance",
+      "fingerprint_sha256": "ca798dd5ac3e7189cf9c89a18f481396c5e39ddcee4916382779f2d753da5659"
+    },
+    {
+      "id": "unicode_expand_v1",
+      "status": "implemented",
+      "unicode_version": "17.0.0",
+      "reference_icu4j_version": "78.1",
+      "reference_icu4j_sha256": "bbb70d3be23110d7295823eee0c2e896ac3b619b3c0f26168f65eb972df51d2a",
+      "expansions_sha256": "2827d2755532eb1642f88d1b9911fb002834cacbf0bdaa014d68ba1b5dadf188",
+      "groups": 15462,
+      "spellings": 34214,
+      "trie_nodes": 34891,
+      "maximum_spelling_utf16_units": 18,
+      "pipeline": [
+        "Offline: enumerate every Unicode scalar and apply ICU SpoofChecker.getSkeleton until fixed point; require convergence within 16 passes",
+        "Group scalars by nonempty fixed-point skeleton and include that skeleton spelling; retain groups with at least two members",
+        "Require every group to be prefix-free; sort spellings by UTF-16 code units",
+        "Runtime: longest-leftmost segmentation by group spellings; copy unmatched Unicode scalars",
+        "Emit original, then all substitutions at up to max_changed_positions distinct matched spans"
+      ],
+      "ordering": "Original first; then changed-span count, ascending span-index tuples, and alternative spellings in UTF-16 lexicographic order with the rightmost alternative varying fastest",
+      "preserve_original": "Original is intrinsic to expansion and always emitted once; preserve_original does not alter this profile",
+      "case_and_accents": "No case folding or accent stripping; apply separate filters explicitly if needed",
+      "empty_policy": "Drop empty input unless keyword-marked; no expansion spelling is empty",
+      "malformed_utf16": "reject",
+      "limits": "Default max_changed_positions=1, range 1..4; max_output_tokens_per_input=1024 and existing byte, stream, attribute and shared memory ceilings",
+      "conformance": "Pinned ICU fixed-point substitution policy, not exhaustive Unicode string inversion or Unicode 17 bidi skeleton conformance",
+      "fingerprint_sha256": "b4f837bccfea329a78d94fdd0ae596b3808bb37e8c94abdc9f1a7aea27c081ab"
+    }
+  ]
+}
